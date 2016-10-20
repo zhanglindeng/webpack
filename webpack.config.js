@@ -2,6 +2,7 @@ var path = require('path');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var DefinePlugin = require('webpack/lib/DefinePlugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
@@ -18,7 +19,13 @@ module.exports = {
     },
     module: {
         loaders: [
-            {test: /\.ts/, loader: "ts"}
+            {test: /\.ts/, loader: "ts"},
+            {test: /\.css$/, exclude: path.resolve('src'), loader: ExtractTextPlugin.extract('style', 'css')},
+            {
+                test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+                loader: "url?limit=10000&mimetype=application/font-woff&name=fonts/[name].[ext]"
+            },
+            {test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, loader: "file?name=fonts/[name].[ext]"}
         ]
     },
     resolve: {
@@ -29,6 +36,7 @@ module.exports = {
         new CommonsChunkPlugin({name: 'polyfills'}),
         new DefinePlugin({
             PRODUCTION: JSON.stringify(process.env.APP_ENVIRONMENT === 'production')
-        })
+        }),
+        new ExtractTextPlugin('[name].[hash].css')
     ]
 };
