@@ -19,6 +19,7 @@ module.exports = {
     },
     module: {
         loaders: [
+            {test: require.resolve('jquery'), loader: 'expose?jQuery!expose?$'},
             {test: /\.ts/, loader: "ts"},
             {test: /\.css$/, include: path.resolve('src/css'), loader: 'style!css'},
             {test: /\.less$/, include: path.resolve('src/less'), loader: 'style!css!less'},
