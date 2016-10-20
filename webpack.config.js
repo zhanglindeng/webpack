@@ -4,11 +4,18 @@ var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var DefinePlugin = require('webpack/lib/DefinePlugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 var CopyWebpackPlugin = require('copy-webpack-plugin');
+var ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
+var UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+
+var appEntry = './src/main.ts';
+if (process.env.APP_ENVIRONMENT === 'production') {
+    appEntry = './src/main-aot.ts';
+}
 
 module.exports = {
     // devtool: '#source-map',
     entry: {
-        'app': './src/main.ts',
+        'app': appEntry,
         'polyfills': [
             'core-js/es6',
             'core-js/es7/reflect',
@@ -29,7 +36,11 @@ module.exports = {
             {test: /\.less$/, include: path.resolve('src/less'), loader: 'style!css!less'},
             {test: /\.less$/, include: path.resolve('src/app'), loader: 'raw!less'},
             {test: /\.html/, include: path.resolve('src/app'), loader: 'raw'},
-            {test: /\.css$/, exclude: path.resolve('src'), loader: ExtractTextPlugin.extract("style", "css")},
+            {
+                test: /\.css$/,
+                exclude: path.resolve('src'),
+                loader: ExtractTextPlugin.extract({fallbackLoader: 'style', loader: 'css'})
+            },
             {test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/, loader: 'file?name=fonts/[name].[ext]'},
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -39,9 +50,15 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.ts', '.html', '.css', '.less']
+        extensions: ['.js', '.ts', '.html', '.css', '.less']
     },
     plugins: [
+        // see https://github.com/angular/angular/issues/11580
+        new ContextReplacementPlugin(
+            /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
+            './src'
+        ),
+        new UglifyJsPlugin(),
         new HtmlWebpackPlugin({template: './src/index.html'}),
         new CommonsChunkPlugin({name: ['app', 'polyfills']}),
         new DefinePlugin({
