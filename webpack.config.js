@@ -22,7 +22,7 @@ module.exports = {
             {test: /\.ts/, loader: "ts"},
             {test: /\.css$/, include: path.resolve('src/css'), loader: 'style!css'},
             {test: /\.css$/, exclude: path.resolve('src'), loader: ExtractTextPlugin.extract("style", "css")},
-            {test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/, loader: 'file?name=fonts/[name].[ext]'}
+            {test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/, loader: 'file?name=fonts/[name].[ext]'},
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
                 loader: "url?limit=10000&mimetype=application/font-woff&name=fonts/[name].[ext]"
