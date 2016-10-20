@@ -5,6 +5,7 @@ var DefinePlugin = require('webpack/lib/DefinePlugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
+    // devtool: '#source-map',
     entry: {
         'app': './src/main.ts',
         'polyfills': [
@@ -20,9 +21,12 @@ module.exports = {
     module: {
         loaders: [
             {test: require.resolve('jquery'), loader: 'expose?jQuery!expose?$'},
-            {test: /\.ts/, loader: "ts"},
+            {test: /\.component\.ts$/, loader: 'ts!angular2-template'},
+            {test: /\.ts$/, exclude: /\.component\.ts$/, loader: 'ts'},
             {test: /\.css$/, include: path.resolve('src/css'), loader: 'style!css'},
             {test: /\.less$/, include: path.resolve('src/less'), loader: 'style!css!less'},
+            {test: /\.less$/, include: path.resolve('src/app'), loader: 'raw!less'},
+            {test: /\.html/, include: path.resolve('src/app'), loader: 'raw'},
             {test: /\.css$/, exclude: path.resolve('src'), loader: ExtractTextPlugin.extract("style", "css")},
             {test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/, loader: 'file?name=fonts/[name].[ext]'},
             {
@@ -37,7 +41,7 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({template: './src/index.html'}),
-        new CommonsChunkPlugin({name: 'polyfills'}),
+        new CommonsChunkPlugin({name: ['app', 'polyfills']}),
         new DefinePlugin({
             PRODUCTION: JSON.stringify(process.env.APP_ENVIRONMENT === 'production')
         }),
