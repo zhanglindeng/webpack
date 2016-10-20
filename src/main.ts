@@ -2,6 +2,7 @@ import {AppComponent} from './app/app.component'
 
 import './css/index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './less/index.less';
 
 import 'font-awesome/css/font-awesome.min.css';
 

@@ -21,6 +21,7 @@ module.exports = {
         loaders: [
             {test: /\.ts/, loader: "ts"},
             {test: /\.css$/, include: path.resolve('src/css'), loader: 'style!css'},
+            {test: /\.less$/, include: path.resolve('src/less'), loader: 'style!css!less'},
             {test: /\.css$/, exclude: path.resolve('src'), loader: ExtractTextPlugin.extract("style", "css")},
             {test: /\.(png|jpe?g|gif|svg|woff|woff2|ttf|eot|ico)$/, loader: 'file?name=fonts/[name].[ext]'},
             {
@@ -31,7 +32,7 @@ module.exports = {
         ]
     },
     resolve: {
-        extensions: ['', '.js', '.ts', '.html', '.css']
+        extensions: ['', '.js', '.ts', '.html', '.css', '.less']
     },
     plugins: [
         new HtmlWebpackPlugin({template: './src/index.html'}),
