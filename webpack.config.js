@@ -3,6 +3,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 var DefinePlugin = require('webpack/lib/DefinePlugin');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = {
     // devtool: '#source-map',
@@ -16,6 +17,7 @@ module.exports = {
     },
     output: {
         path: './dist',
+        // publicPath: '/assets/',
         filename: "[name].[hash].js"
     },
     module: {
@@ -45,6 +47,9 @@ module.exports = {
         new DefinePlugin({
             PRODUCTION: JSON.stringify(process.env.APP_ENVIRONMENT === 'production')
         }),
-        new ExtractTextPlugin('[name].[hash].css')
+        new ExtractTextPlugin('[name].[hash].css'),
+        new CopyWebpackPlugin([
+            {from: './src/image', to: 'image'}
+        ])
     ]
 };
