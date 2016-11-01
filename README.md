@@ -13,3 +13,5 @@ webpack
 - typescript
 - typings
 - ionic2
+
+### [webpack](http://array_huang.coding.me/webpack-book/)
