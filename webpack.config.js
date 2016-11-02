@@ -25,6 +25,7 @@ module.exports = {
     output: {
         path: './dist',
         // publicPath: '/assets/',
+        // [hash:4] 表示截取 [hash] 前四位
         filename: "[name].[hash].js"
     },
     module: {
